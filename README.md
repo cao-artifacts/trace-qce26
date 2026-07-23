@@ -13,24 +13,29 @@ set of $M$ qubits and inserts a wire cut whenever a two-qubit gate references a 
 operand. Its main practical policy, **LR-Gate** (Latest-Reuse Gate), scans a bounded window
 of upcoming gates and evicts the resident qubit whose next two-qubit-gate use lies latest.
 
-This is a **minimal, self-contained artifact**: it contains the scheduler, the workload
-generators, the exact oracle, and the drivers for the paper's main simulation experiments.
-All experiments use **fixed random seeds**, so every result file regenerates
-deterministically from the code below — no raw data is shipped. The end-to-end IBM Quantum
-hardware runs reported in the paper are not included (they require an IBM Quantum account
-and QPU time).
+This is a **minimal artifact**:
+
+- `src/` contains the scheduler, workload generators, exact oracle, and the drivers for the
+  paper's main simulation experiments. All simulation experiments use **fixed random
+  seeds**, so their result files regenerate deterministically — no simulation data is
+  shipped.
+- `data/ibm-hardware/` contains the raw results of the paper's IBM Quantum hardware
+  validation. Hardware runs are **not** deterministically reproducible (device noise,
+  calibration drift, QPU access required), so this one-run snapshot is included as-is —
+  see the disclaimer in [`data/ibm-hardware/README.md`](data/ibm-hardware/README.md).
 
 ## Contents
 
-| File | Role |
+| Path | Role |
 |---|---|
-| `qvm_scheduler.py` | TRACE scheduler with the four eviction policies (Random, LRU, LR-Gate, Lookahead) |
-| `circuits.py` | Workload generators (QAOA, QFT, random entanglement, temporal/ancilla-reuse families) |
-| `temporal_oracle.py` | Exact dynamic-programming oracle (OPT) for small instances |
-| `run_temporal_experiments.py` | Order sensitivity (RQ1), oracle gap (RQ2), dynamic-circuit-inspired workloads (RQ4) |
-| `run_experiments.py` | Cut counts, capacity sweep, window ablation, baselines on QAOA/QFT/random workloads |
-| `run_scalability.py` | Scheduler runtime / planning-cost scaling |
-| `plot_temporal_results.py` | Regenerates the temporal-result figures from the JSONs above |
+| `src/qvm_scheduler.py` | TRACE scheduler with the four eviction policies (Random, LRU, LR-Gate, Lookahead) |
+| `src/circuits.py` | Workload generators (QAOA, QFT, random entanglement, temporal/ancilla-reuse families) |
+| `src/temporal_oracle.py` | Exact dynamic-programming oracle (OPT) for small instances |
+| `src/run_temporal_experiments.py` | Order sensitivity (RQ1), oracle gap (RQ2), dynamic-circuit-inspired workloads (RQ4) |
+| `src/run_experiments.py` | Cut counts, capacity sweep, window ablation, baselines on QAOA/QFT/random workloads |
+| `src/run_scalability.py` | Scheduler runtime / planning-cost scaling |
+| `src/plot_temporal_results.py` | Regenerates the temporal-result figures from the JSONs above |
+| `data/ibm-hardware/` | Single-run IBM Quantum (ibm_fez, 156 qubits) hardware results + disclaimer |
 
 ## Setup
 
@@ -41,21 +46,23 @@ numpy 2.4.4, matplotlib 3.10.8 (matplotlib/seaborn needed only for plotting):
 pip install qiskit qiskit-addon-cutting qiskit-aer networkx numpy matplotlib seaborn
 ```
 
-## Reproducing the results
+## Reproducing the simulation results
 
-Each driver writes its JSON outputs into `results/` (created on first run):
+Each driver writes its JSON outputs into `src/results/` (next to the scripts, created on
+first run — the paths work from any working directory):
 
 ```bash
-python run_temporal_experiments.py   # -> exp_rq1_order_sensitivity.json,
-                                     #    exp_rq2_oracle_gap.json,
-                                     #    exp_rq4_temporal_workloads.json
-python run_experiments.py            # -> exp1_* cut-count / ablation / baseline JSONs
-python run_scalability.py            # -> exp5_scalability.json
-python plot_temporal_results.py      # -> figures from the exp_rq* JSONs
+python src/run_temporal_experiments.py   # -> src/results/exp_rq1_order_sensitivity.json,
+                                         #    src/results/exp_rq2_oracle_gap.json,
+                                         #    src/results/exp_rq4_temporal_workloads.json
+python src/run_experiments.py            # -> src/results/exp1_* cut-count / ablation / baseline JSONs
+python src/run_scalability.py            # -> src/results/exp5_scalability.json
+python src/plot_temporal_results.py      # -> figures from the exp_rq* JSONs
 ```
 
 Seeds are fixed inside the drivers, so re-running reproduces the numbers reported in the
-paper for these experiments.
+paper for these experiments. The hardware numbers in `data/ibm-hardware/` are a one-time
+snapshot and will not reproduce exactly (see its README).
 
 ## Citation
 
