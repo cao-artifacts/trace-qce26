@@ -13,7 +13,7 @@ set of $M$ qubits and inserts a wire cut whenever a two-qubit gate references a 
 operand. Its main practical policy, **LR-Gate** (Latest-Reuse Gate), scans a bounded window
 of upcoming gates and evicts the resident qubit whose next two-qubit-gate use lies latest.
 
-This is a **minimal artifact**:
+This repository ships the code for the paper's simulation experiments and the data that cannot be regenerated:
 
 - `src/` contains the scheduler, workload generators, exact oracle, and the drivers for the
   paper's main simulation experiments. All simulation experiments use **fixed random
