@@ -2,7 +2,7 @@
 
 Research artifact for the paper accepted at **IEEE QCE 2026** (IEEE International Conference
 on Quantum Computing and Engineering / IEEE Quantum Week), Quantum System Software (QSYS)
-track, paper **QSYS-564**. Toronto, Canada, September 13–18, 2026.
+track. Toronto, Canada, September 13–18, 2026.
 
 **Authors:** Charles Cao, Sergei V. Kalinin (University of Tennessee, Knoxville);
 Jong Youl Choi, Ahmad Maroof Karimi (Oak Ridge National Laboratory).
